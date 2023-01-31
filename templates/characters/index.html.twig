@@ -28,7 +28,7 @@
                 <p class="card-text">Height: {{ character.height }}</p>
                 <p class="card-text">Mass: {{ character.mass }}</p>
                 <p class="card-text">Gender: {{ character.gender }}</p>
-                <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                <a href="{{ url('characters_edit', {'id': character.id}) }}" class="btn btn-primary btn-sm">Edit</a>
             </div>
         </div>
         {% endfor %}

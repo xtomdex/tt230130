@@ -54,6 +54,9 @@ final class CharactersController extends AbstractController
             }
         }
 
-        return $this->render('character_edit_View');
+        return $this->render('characters/edit.html.twig', [
+            'form' => $form->createView(),
+            'character' => $character
+        ]);
     }
 }
