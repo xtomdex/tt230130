@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\UseCase\Character\Edit;
 use App\UseCase\Character\Index;
+use App\UseCase\Character\Delete;
 
 final class CharactersController extends AbstractController
 {
@@ -60,6 +61,16 @@ final class CharactersController extends AbstractController
             'form' => $form->createView(),
             'character' => $character
         ]);
+    }
+
+    #[Route(path: "/character/{id}/delete", name: "characters_delete", methods: ['POST'])]
+    public function delete(Character $character, Request $request, Delete\Handler $handler): Response
+    {
+        if ($this->isCsrfTokenValid('delete', $request->request->get('token'))) {
+            $handler->handle($character);
+        }
+
+        return $this->redirectToRoute('characters_index');
     }
 
     #[Route(path: "/character/{id}/delete-picture", name: "characters_delete_picture", methods: ['POST'])]
