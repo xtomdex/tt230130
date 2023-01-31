@@ -8,11 +8,11 @@ use App\Entity\Character;
 use App\Repository\CharacterRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\UseCase\Character\Edit;
+use App\UseCase\Character\Index;
 
 final class CharactersController extends AbstractController
 {
@@ -21,15 +21,19 @@ final class CharactersController extends AbstractController
     ) {}
 
     #[Route(path: "/", name: "characters_index")]
-    public function index(Request $request, CharacterRepository $charactersRepo): JsonResponse
+    public function index(Request $request, CharacterRepository $charactersRepo): Response
     {
-        if (($name = $request->query->get('name')) && strlen($name) > 2) {
-            $characters = $charactersRepo->findByName($name);
-        } else {
-            $characters = $charactersRepo->findAll();
-        }
+        $filter = new Index\Filter();
+        $form = $this->createForm(Index\Form::class, $filter);
 
-        return $this->json($characters);
+        $form->handleRequest($request);
+
+        $characters = $charactersRepo->findWithFilter($filter);
+
+        return $this->render('characters/index.html.twig', [
+            'form' => $form->createView(),
+            'characters' => $characters
+        ]);
     }
 
     #[Route(path: "/character/{id}", name: "characters_edit")]

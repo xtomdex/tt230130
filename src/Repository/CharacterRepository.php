@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Character;
 use App\Exception\CharacterNotFound;
+use App\UseCase\Character\Index\Filter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,12 +26,18 @@ final class CharacterRepository extends ServiceEntityRepository
         return $character;
     }
 
-    public function findByName(string $name): array
+    public function findWithFilter(Filter $filter): array
     {
-        return $this->createQueryBuilder('c')
-            ->where('c.name LIKE :name')
-            ->setParameter('name', '%' . addcslashes($name, '%_') . '%')
-            ->getQuery()
-            ->getResult();
+        $query = $this->createQueryBuilder('c');
+
+        if ($filter->name && strlen($filter->name) > 2) {
+            $query
+                ->andWhere('c.name LIKE :name')
+                ->setParameter('name', '%' . addcslashes($filter->name, '%_') . '%')
+            ;
+        }
+
+
+        return $query->getQuery()->getResult();
     }
 }
