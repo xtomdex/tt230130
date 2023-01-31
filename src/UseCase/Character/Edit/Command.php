@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace App\UseCase\Character\Edit;
 
 use App\Entity\Character;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final class Command
 {
+    #[Assert\Image]
+    public ?UploadedFile $image = null;
+
     public function __construct(
         public int $id,
         public string $name,

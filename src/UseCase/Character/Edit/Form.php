@@ -4,6 +4,7 @@ namespace App\UseCase\Character\Edit;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,6 +24,11 @@ final class Form extends AbstractType
                     'Female' => 'F',
                     'N/A' => 'N/A'
                 ]
+            ])
+            ->add('image', FileType::class, [
+                'multiple' => false,
+                'required' => false,
+
             ])
         ;
     }

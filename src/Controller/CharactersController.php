@@ -6,6 +6,8 @@ namespace App\Controller;
 
 use App\Entity\Character;
 use App\Repository\CharacterRepository;
+use App\Service\Filesystem\FileRemover;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,5 +60,17 @@ final class CharactersController extends AbstractController
             'form' => $form->createView(),
             'character' => $character
         ]);
+    }
+
+    #[Route(path: "/character/{id}/delete-picture", name: "characters_delete_picture", methods: ['POST'])]
+    public function deletePicture(Character $character, Request $request, FileRemover $fileRemover, EntityManagerInterface $em): Response
+    {
+        if ($this->isCsrfTokenValid('delete-picture', $request->request->get('token'))) {
+            $fileRemover->remove($character->getPictureName(), '/characters');
+            $character->setPictureName(null);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('characters_edit', ['id' => $character->getId()]);
     }
 }

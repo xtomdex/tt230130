@@ -67,11 +67,6 @@ final class Character
         $this->gender = $gender;
     }
 
-    public function updatePicture(?string $picture): void
-    {
-        $this->picture = $picture;
-    }
-
     public function getId(): int
     {
         return $this->id;
@@ -97,11 +92,6 @@ final class Character
         return $this->gender;
     }
 
-    public function getPicture(): ?string
-    {
-        return $this->picture;
-    }
-
     public function getMovies(): array
     {
         return $this->movies->toArray();
@@ -116,12 +106,13 @@ final class Character
         return $this;
     }
 
-    public function removeMovie(Movie $movie): self
+    public function getPictureName(): ?string
     {
-        if ($this->movies->contains($movie)) {
-            $this->movies->removeElement($movie);
-        }
+        return $this->picture;
+    }
 
-        return $this;
+    public function setPictureName(?string $picture): void
+    {
+        $this->picture = $picture;
     }
 }

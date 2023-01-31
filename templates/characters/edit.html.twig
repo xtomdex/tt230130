@@ -5,6 +5,17 @@
 {% block body %}
     <div class="card">
         <div class="card-body">
+            {% if character.pictureName %}
+                <img src="{{ asset('uploads/characters/') ~ character.pictureName }}" alt="">
+                <form
+                        action="{{ url('characters_delete_picture', {'id': character.id}) }}"
+                        method="post"
+                        onsubmit="return confirm('Are you sure you want to delete this character\'s picture?')"
+                >
+                    <input type="hidden" name="token" value="{{ csrf_token('delete-picture') }}">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete picture</button>
+                </form>
+            {% endif %}
             {{ form_start(form) }}
             {{ form_widget(form) }}
             <button type="submit" class="btn btn-primary">Save</button>
