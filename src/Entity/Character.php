@@ -37,7 +37,7 @@ final class Character
 
     #[JoinTable(name: 'movies_characters')]
     #[JoinColumn(name: 'character_id', referencedColumnName: 'id')]
-    #[InverseJoinColumn(name: 'movie_id', referencedColumnName: 'id', unique: true)]
+    #[InverseJoinColumn(name: 'movie_id', referencedColumnName: 'id')]
     #[ManyToMany(targetEntity: Movie::class)]
     private Collection $movies;
 
